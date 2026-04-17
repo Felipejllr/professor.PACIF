@@ -1,0 +1,40 @@
+<div class="input-group">
+    <label>Modelos Rápidos:</label>
+    <select id="templateDocs" onchange="aplicarTemplate()">
+        <option value="">Selecione um modelo...</option>
+        <option value="auditoria">Auditoria de Questões (INEP/Graduação)</option>
+        <option value="aula">Plano de Aula (Engenharia)</option>
+    </select>
+</div>
+
+<script>
+    const templates = {
+        auditoria: {
+            p: "Auditor Pedagógico sênior especialista em normas do INEP",
+            a: "Analisar a clareza, comando e distratores destas questões de engenharia",
+            c: "Exame de Physics II para graduação, focado em Hidrostática e Fluidos",
+            i: "Verifique se há ambiguidade, valide os cálculos e garanta que o comando seja direto.",
+            f: "Relatório de revisão com [Questão | Erro Encontrado | Sugestão de Ajuste]"
+        },
+        aula: {
+            p: "Professor M.Sc. em Engenharia Civil",
+            a: "Criar um roteiro de aula prática",
+            c: "Laboratório de Materiais de Construção, foco em Bioconcreto",
+            i: "Inclua bibliografia básica e uma atividade de fixação de 15 minutos ao final.",
+            f: "Markdown com tópicos estruturados"
+        }
+    };
+
+    function aplicarTemplate() {
+        const selected = document.getElementById('templateDocs').value;
+        if (templates[selected]) {
+            document.getElementById('p').value = templates[selected].p;
+            document.getElementById('a').value = templates[selected].a;
+            document.getElementById('c').value = templates[selected].c;
+            document.getElementById('i').value = templates[selected].i;
+            document.getElementById('f').value = templates[selected].f;
+        }
+    }
+
+    // Mantém as funções gerar() e copiar() anteriores...
+</script>
