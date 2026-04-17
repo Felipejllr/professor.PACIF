@@ -3,121 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador PACIF | Engenharia</title>
+    <title>Gerador PACIF</title>
     <style>
-        :root { --primary: #2563eb; --bg: #f8fafc; --text: #1e293b; --card: #ffffff; --border: #e2e8f0; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; padding: 20px; }
-        .container { width: 100%; max-width: 1000px; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-        .input-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px; }
-        label { font-weight: 600; font-size: 0.85rem; color: var(--primary); text-transform: uppercase; }
-        input, textarea, select { padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; }
-        .output-area { background: #f1f5f9; padding: 20px; border-radius: 8px; border: 1px dashed var(--primary); min-height: 200px; }
-        #promptSaida { white-space: pre-wrap; line-height: 1.6; font-size: 0.95rem; margin: 0; }
-        button { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-        .copy-btn { background: #64748b; margin-top: 10px; }
-        .highlight { color: var(--primary); font-weight: bold; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f9; color: #333; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .wrapper { width: 100%; max-width: 800px; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        h1 { color: #1a73e8; font-size: 24px; text-align: center; margin-bottom: 30px; }
+        .input-box { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 14px; color: #555; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        textarea { height: 100px; resize: none; }
+        button { width: 100%; padding: 15px; background-color: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background-color: #1557b0; }
+        .result-container { margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-left: 5px solid #1a73e8; border-radius: 4px; }
+        #promptFinal { white-space: pre-wrap; font-size: 15px; line-height: 1.6; color: #222; }
+        .copy-btn { background-color: #34a853; margin-top: 15px; }
+        .copy-btn:hover { background-color: #2d8e47; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Gerador de Prompts <span class="highlight">PACIF</span></h1>
-        <p>Ferramenta de Apoio Pedagógico e Engenharia</p>
-    </header>
+<div class="wrapper">
+    <h1>Gerador de Prompts PACIF</h1>
 
-    <div class="grid">
-        <div class="inputs">
-            <div class="input-group">
-                <label>Modelos Prontos</label>
-                <select id="templateDocs" onchange="aplicarTemplate()">
-                    <option value="">Selecione para preencher...</option>
-                    <option value="auditoria">Auditoria de Questões (INEP)</option>
-                    <option value="aula">Plano de Aula (Engenharia Civil)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>P - Público (Personagem)</label>
-                <input type="text" id="p" placeholder="Ex: Auditor Pedagógico">
-            </div>
-            <div class="input-group">
-                <label>A - Ação (O que fazer?)</label>
-                <input type="text" id="a" placeholder="Ex: Analisar questões">
-            </div>
-            <div class="input-group">
-                <label>C - Contexto (Cenário)</label>
-                <textarea id="c" placeholder="Ex: Disciplina de Física II..."></textarea>
-            </div>
-            <div class="input-group">
-                <label>I - Instruções (Regras)</label>
-                <textarea id="i" placeholder="Ex: Verifique cálculos e clareza..."></textarea>
-            </div>
-            <div class="input-group">
-                <label>F - Formato (Saída)</label>
-                <input type="text" id="f" placeholder="Ex: Tabela formatada">
-            </div>
-            <button onclick="gerar()">Gerar Prompt Final</button>
-        </div>
+    <div class="input-box">
+        <label>P - Público (Quem a IA deve ser?)</label>
+        <input type="text" id="p" placeholder="Ex: Professor de Engenharia Civil">
+    </div>
 
-        <div class="output">
-            <label>Prompt Estruturado:</label>
-            <div class="output-area">
-                <p id="promptSaida">O resultado aparecerá aqui após clicar em Gerar.</p>
-            </div>
-            <button class="copy-btn" onclick="copiar()">Copiar Texto</button>
-        </div>
+    <div class="input-box">
+        <label>A - Ação (O que deve ser feito?)</label>
+        <input type="text" id="a" placeholder="Ex: Elaborar 10 questões de Hidrostática">
+    </div>
+
+    <div class="input-box">
+        <label>C - Contexto (Cenário e detalhes)</label>
+        <textarea id="c" placeholder="Ex: Alunos de graduação, foco em pressão manométrica..."></textarea>
+    </div>
+
+    <div class="input-box">
+        <label>I - Instruções (Regras e restrições)</label>
+        <textarea id="i" placeholder="Ex: Siga as normas da ABNT, use linguagem técnica..."></textarea>
+    </div>
+
+    <div class="input-box">
+        <label>F - Formato (Como deve ser a saída?)</label>
+        <input type="text" id="f" placeholder="Ex: PDF, Tabela, Lista em Markdown">
+    </div>
+
+    <button onclick="gerar()">GERAR PROMPT</button>
+
+    <div class="result-container">
+        <label>Seu Prompt Pronto:</label>
+        <p id="promptFinal">Preencha os campos e clique em gerar...</p>
+        <button class="copy-btn" onclick="copiar()">COPIAR PROMPT</button>
     </div>
 </div>
 
 <script>
-    const templates = {
-        auditoria: {
-            p: "Auditor Pedagógico especialista em normas do INEP e Enade",
-            a: "Realizar a auditoria técnica e pedagógica de questões de engenharia",
-            c: "Avaliação de nível superior para o curso de Engenharia Civil (Física II)",
-            i: "Verifique se o comando da questão é direto, se não há dubiedade e se os distratores são plausíveis.",
-            f: "Relatório técnico em tópicos"
-        },
-        aula: {
-            p: "Professor e M.Sc. em Engenharia Civil",
-            a: "Criar um roteiro de aula prática de laboratório",
-            c: "Aula sobre resistência de materiais utilizando bioconcreto",
-            i: "O roteiro deve conter introdução, materiais necessários e passo a passo experimental.",
-            f: "Documento estruturado em Markdown"
-        }
-    };
-
-    function aplicarTemplate() {
-        const val = document.getElementById('templateDocs').value;
-        if(templates[val]) {
-            document.getElementById('p').value = templates[val].p;
-            document.getElementById('a').value = templates[val].a;
-            document.getElementById('c').value = templates[val].c;
-            document.getElementById('i').value = templates[val].i;
-            document.getElementById('f').value = templates[val].f;
-        }
-    }
-
     function gerar() {
-        const p = document.getElementById('p').value || "...";
-        const a = document.getElementById('a').value || "...";
-        const c = document.getElementById('c').value || "...";
-        const i = document.getElementById('i').value || "...";
-        const f = document.getElementById('f').value || "...";
-
-        const resultado = `Atue como ${p}.\nSua tarefa é: ${a}.\n\nCONTEXTO:\n${c}\n\nINSTRUÇÕES:\n${i}\n\nFORMATO DE SAÍDA:\n${f}`;
-        document.getElementById('promptSaida').innerText = resultado;
-    }
-
-    function copiar() {
-        const texto = document.getElementById('promptSaida').innerText;
-        navigator.clipboard.writeText(texto);
-        alert("Copiado!");
-    }
-</script>
-
-</body>
-</html>
+        const p = document.getElementById('p').value;
+        const a = document.getElementById('a').value;
+        const c = document.getElementById('c').value;
+        const i = document.getElementById('i').value;
+        const f = document.getElementById('f').value;
