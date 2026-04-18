@@ -2,43 +2,127 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gerador PACIF</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador PACIF | Equipa de Engenharia</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
-        .box { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input, textarea { width: 100%; margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        #res { margin-top: 20px; padding: 15px; background: #e8f0fe; border-radius: 5px; white-space: pre-wrap; display: none; }
+        body { font-family: -apple-system, sans-serif; padding: 20px; background: #f0f2f5; color: #333; line-height: 1.5; }
+        .box { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1, h2 { color: #1a73e8; text-align: center; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; color: #1a73e8; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+        textarea { height: 80px; resize: vertical; }
+        button { width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #1557b0; }
+        #res-box { margin-top: 25px; padding: 20px; background: #e8f0fe; border-radius: 8px; display: none; border: 1px solid #1a73e8; }
+        #res-text { white-space: pre-wrap; font-size: 15px; margin-bottom: 15px; }
+        .copy-btn { background: #34a853; }
+        .copy-btn:hover { background: #2d8e47; }
+        
+        /* Tabela de Ajuda */
+        .help-section { margin-top: 40px; border-top: 2px solid #eee; padding-top: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f8f9fa; color: #1a73e8; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>Gerador PACIF</h2>
-    <input type="text" id="p" placeholder="P - Persona">
-    <input type="text" id="a" placeholder="A - Ação">
-    <textarea id="c" placeholder="C - Contexto"></textarea>
-    <textarea id="i" placeholder="I - Instruções"></textarea>
-    <input type="text" id="f" placeholder="F - Formato">
+    <h1>Gerador de Prompts PACIF</h1>
+    
+    <div class="input-group">
+        <label>P - Persona (Quem a IA deve ser?)</label>
+        <input type="text" id="p" placeholder="Ex: Docente e Avaliador(a) Pedagógic(a)">
+    </div>
+    
+    <div class="input-group">
+        <label>A - Ação (O que deve fazer?)</label>
+        <input type="text" id="a" placeholder="Ex: Elaborar uma metodologia de ensino">
+    </div>
+    
+    <div class="input-group">
+        <label>C - Contexto (Cenário/Alunos)</label>
+        <textarea id="c" placeholder="Ex: discentes de graduação com dificuldades em desenvolver soft skills..."></textarea>
+    </div>
+    
+    <div class="input-group">
+        <label>I - Instruções (Regras Técnicas)</label>
+        <textarea id="i" placeholder="Ex: Siga normas do INEP, utilize a taxonomia de bloom, valide cálculos..."></textarea>
+    </div>
+    
+    <div class="input-group">
+        <label>F - Formato (Tipo de Saída)</label>
+        <input type="text" id="f" placeholder="Ex: Tabela com sugestões de ajuste">
+    </div>
     
     <button onclick="gerar()">GERAR PROMPT</button>
 
-    <div id="res"></div>
+    <div id="res-box">
+        <label>Prompt Final:</label>
+        <div id="res-text"></div>
+        <button class="copy-btn" onclick="copiar()">COPIAR TEXTO</button>
+    </div>
+
+    <div class="help-section">
+        <h2>Guia de Preenchimento</h2>
+        <table>
+            <tr>
+                <th>Sigla</th>
+                <th>Instrução</th>
+                <th>Exemplo</th>
+            </tr>
+            <tr>
+                <td><strong>P</strong></td>
+                <td>Defina a especialidade da IA.</td>
+                <td>Especialista em normas ENADE.</td>
+            </tr>
+            <tr>
+                <td><strong>A</strong></td>
+                <td>O que ela deve entregar?</td>
+                <td>Revisar enunciados e cálculos.</td>
+            </tr>
+            <tr>
+                <td><strong>C</strong></td>
+                <td>Público e nível de ensino.</td>
+                <td>Alunos de Engenharia Civil.</td>
+            </tr>
+            <tr>
+                <td><strong>I</strong></td>
+                <td>Regras e restrições.</td>
+                <td>Proibido ambiguidades; use ABNT.</td>
+            </tr>
+            <tr>
+                <td><strong>F</strong></td>
+                <td>Como os dados aparecem.</td>
+                <td>Relatório em tópicos ou tabela.</td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script>
     function gerar() {
-        var p = document.getElementById('p').value;
-        var a = document.getElementById('a').value;
-        var c = document.getElementById('c').value;
-        var i = document.getElementById('i').value;
-        var f = document.getElementById('f').value;
+        var p = document.getElementById('p').value || "...";
+        var a = document.getElementById('a').value || "...";
+        var c = document.getElementById('c').value || "...";
+        var i = document.getElementById('i').value || "...";
+        var f = document.getElementById('f').value || "...";
         
-        var prompt = "ATUE COMO: " + p + "\nAÇÃO: " + a + "\nCONTEXTO: " + c + "\nINSTRUÇÕES: " + i + "\nFORMATO: " + f;
+        var prompt = "ATUE COMO: " + p + "\n\nTAREFA: " + a + "\n\nCONTEXTO:\n" + c + "\n\nINSTRUÇÕES:\n" + i + "\n\nFORMATO DE SAÍDA:\n" + f;
         
-        var campoResultado = document.getElementById('res');
-        campoResultado.innerText = prompt;
-        campoResultado.style.display = 'block';
+        document.getElementById('res-text').innerText = prompt;
+        document.getElementById('res-box').style.display = 'block';
+        
+        // Rola a página para o resultado
+        document.getElementById('res-box').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copiar() {
+        var texto = document.getElementById('res-text').innerText;
+        navigator.clipboard.writeText(texto).then(function() {
+            alert("Prompt copiado com sucesso!");
+        });
     }
 </script>
 
